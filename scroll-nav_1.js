@@ -8,11 +8,11 @@ function initScrollSpy({
   throttleMs = 100,
 }) {
   if (!menuBlockId) {
-    console.warn("ScrollSpy: menuBlockId не задан");
+    console.warn("ScrollSpy: не указан menuBlockId");
     return;
   }
 
-  const throttle = (callee, timeout) => {
+  function throttle(callee, timeout) {
     let timer = null;
     return function (...args) {
       if (timer) return;
@@ -21,17 +21,20 @@ function initScrollSpy({
         timer = null;
       }, timeout);
     };
-  };
+  }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", function () {
     const menuBlock = document.getElementById(menuBlockId);
     if (!menuBlock) return;
 
     const anchors = Array.from(document.querySelectorAll(anchorSelector));
     const menuButtons = Array.from(menuBlock.querySelectorAll(menuButtonSelector));
+    const scrollContainer = document.querySelector(scrollContainerSelector);
+
     if (!anchors.length || !menuButtons.length) return;
 
-    const scrollContainer = document.querySelector(scrollContainerSelector);
+    // === Изначально: очищаем все активные классы ===
+    menuButtons.forEach((btn) => btn.classList.remove(activeClass));
 
     let lastAnchorName = null;
 
@@ -78,7 +81,6 @@ function initScrollSpy({
               behavior: "smooth",
             });
           }
-
         } else {
           button.classList.remove(activeClass);
         }
@@ -87,7 +89,6 @@ function initScrollSpy({
 
     function handleScroll() {
       const current = getCurrentAnchorName();
-
       if (current !== lastAnchorName) {
         lastAnchorName = current;
         setActiveButton(current);
@@ -98,6 +99,6 @@ function initScrollSpy({
     const throttledScroll = throttle(handleScroll, throttleMs);
     window.addEventListener("scroll", throttledScroll);
     window.addEventListener("resize", throttledScroll);
-    throttledScroll();
+    throttledScroll(); 
   });
 }
