@@ -37,21 +37,45 @@
       return currentAnchor?.getAttribute('name') || null;
     }
 
+    // function setActiveButton(anchorName) {
+    //   menuButtons.forEach((button) => {
+    //     const link = button.querySelector("a");
+    //     if (!link) return;
+
+    //     const href = link.getAttribute("href") || "";
+    //     const targetName = href.replace("#", "");
+
+    //     if (targetName === anchorName) {
+    //       button.classList.add(ACTIVE_CLASS);
+    //     } else {
+    //       button.classList.remove(ACTIVE_CLASS);
+    //     }
+    //   });
+    // }
+
     function setActiveButton(anchorName) {
-      menuButtons.forEach((button) => {
-        const link = button.querySelector("a");
-        if (!link) return;
+  menuButtons.forEach((button) => {
+    const link = button.querySelector("a");
+    if (!link) return;
 
-        const href = link.getAttribute("href") || "";
-        const targetName = href.replace("#", "");
+    const href = link.getAttribute("href") || "";
+    const targetName = href.replace("#", "");
 
-        if (targetName === anchorName) {
-          button.classList.add(ACTIVE_CLASS);
-        } else {
-          button.classList.remove(ACTIVE_CLASS);
-        }
+    if (targetName === anchorName) {
+      button.classList.add(ACTIVE_CLASS);
+
+      // Прокручиваем родительский контейнер к активной кнопке
+      button.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center', // важно: по горизонтали — в центр
       });
+    } else {
+      button.classList.remove(ACTIVE_CLASS);
     }
+  });
+}
+
 
     function handleScroll() {
       const current = getCurrentAnchorName();
