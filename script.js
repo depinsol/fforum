@@ -1,15 +1,4 @@
 
-<style>
-  .menu-nav_item.menu-nav_item-active .tn-atom {
-    background-color: #c72624 !important;
-    color: #ffffff !important;
-    border-color: #c72624 !important;
-  }
-</style>
-
-
-
-<script>
   function throttle(callee, timeout) {
     let timer = null;
     return function (...args) {
@@ -78,4 +67,4 @@
     window.addEventListener('resize', throttledScroll);
     throttledScroll();
   });
-</script>
+
