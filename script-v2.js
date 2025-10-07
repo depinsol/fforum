@@ -53,7 +53,35 @@
     //   });
     // }
 
+//     function setActiveButton(anchorName) {
+//   menuButtons.forEach((button) => {
+//     const link = button.querySelector("a");
+//     if (!link) return;
+
+//     const href = link.getAttribute("href") || "";
+//     const targetName = href.replace("#", "");
+
+//     if (targetName === anchorName) {
+//       button.classList.add(ACTIVE_CLASS);
+
+//       // Прокручиваем родительский контейнер к активной кнопке
+//       button.scrollIntoView({
+//         behavior: 'smooth',
+//         block: 'nearest',
+//         inline: 'center', // важно: по горизонтали — в центр
+//       });
+//     } else {
+//       button.classList.remove(ACTIVE_CLASS);
+//     }
+//   });
+// }
+
+
     function setActiveButton(anchorName) {
+  const scrollContainer = document.querySelector(".menu_wrapper .tn-molecule");
+
+  if (!scrollContainer) return;
+
   menuButtons.forEach((button) => {
     const link = button.querySelector("a");
     if (!link) return;
@@ -64,17 +92,23 @@
     if (targetName === anchorName) {
       button.classList.add(ACTIVE_CLASS);
 
-      // Прокручиваем родительский контейнер к активной кнопке
-      button.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center', // важно: по горизонтали — в центр
+      const containerRect = scrollContainer.getBoundingClientRect();
+      const buttonRect = button.getBoundingClientRect();
+
+      const offsetLeft = buttonRect.left - containerRect.left;
+      const scrollTo = offsetLeft + scrollContainer.scrollLeft - (scrollContainer.clientWidth / 2 - button.offsetWidth / 2);
+
+      scrollContainer.scrollTo({
+        left: scrollTo,
+        behavior: "smooth"
       });
+
     } else {
       button.classList.remove(ACTIVE_CLASS);
     }
   });
 }
+
 
 
     function handleScroll() {
