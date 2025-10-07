@@ -1,5 +1,3 @@
-
-
   // ======== НАСТРОЙКИ ========
 
   // Отступ (в пикселях) от верха окна до якоря, при котором активируется кнопка
@@ -62,53 +60,55 @@
       return currentAnchor?.getAttribute('name') || null;
     }
 
-    function setActiveButton(anchorName) {
-      const scrollContainer = document.querySelector(SCROLL_CONTAINER_SELECTOR);
-      if (!scrollContainer) return;
+function setActiveButton(anchorName) {
+  const scrollContainer = document.querySelector(SCROLL_CONTAINER_SELECTOR);
+  if (!scrollContainer) return;
 
-      menuButtons.forEach((button) => {
-        const link = button.querySelector("a");
-        if (!link) return;
+  menuButtons.forEach((button) => {
+    const link = button.querySelector("a");
+    if (!link) return;
 
-        const href = link.getAttribute("href") || "";
-        const targetName = href.replace("#", "");
+    const href = link.getAttribute("href") || "";
+    const targetName = href.replace("#", "");
 
-        if (targetName === anchorName) {
-          button.classList.add(ACTIVE_CLASS);
+    if (anchorName && targetName === anchorName) {
+      button.classList.add(ACTIVE_CLASS);
 
-          // Центрируем кнопку в скролл-контейнере
-          const containerRect = scrollContainer.getBoundingClientRect();
-          const buttonRect = button.getBoundingClientRect();
+      // Центрируем кнопку в скролл-контейнере
+      const containerRect = scrollContainer.getBoundingClientRect();
+      const buttonRect = button.getBoundingClientRect();
 
-          const offsetLeft = buttonRect.left - containerRect.left;
-          const scrollTo =
-            offsetLeft +
-            scrollContainer.scrollLeft -
-            (scrollContainer.clientWidth / 2 - button.offsetWidth / 2);
+      const offsetLeft = buttonRect.left - containerRect.left;
+      const scrollTo =
+        offsetLeft +
+        scrollContainer.scrollLeft -
+        (scrollContainer.clientWidth / 2 - button.offsetWidth / 2);
 
-          scrollContainer.scrollTo({
-            left: scrollTo,
-            behavior: "smooth",
-          });
-
-        } else {
-          button.classList.remove(ACTIVE_CLASS);
-        }
+      scrollContainer.scrollTo({
+        left: scrollTo,
+        behavior: "smooth",
       });
-    }
 
-    function handleScroll() {
-      const current = getCurrentAnchorName();
-      if (current && current !== lastAnchorName) {
-        lastAnchorName = current;
-        setActiveButton(current);
-        console.log("Текущий якорь:", current);
-      }
+    } else {
+      button.classList.remove(ACTIVE_CLASS);
     }
+  });
+}
+
+
+  function handleScroll() {
+  const current = getCurrentAnchorName();
+
+  if (current !== lastAnchorName) {
+    lastAnchorName = current;
+    setActiveButton(current); 
+    console.log("Текущий якорь:", current);
+  }
+}
+
 
     const throttledScroll = throttle(handleScroll, SCROLL_THROTTLE_MS);
     window.addEventListener("scroll", throttledScroll);
     window.addEventListener("resize", throttledScroll);
     throttledScroll();
   });
-
